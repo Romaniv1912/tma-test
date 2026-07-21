@@ -1,5 +1,6 @@
 import { Section, Cell, Image, List } from '@telegram-apps/telegram-ui';
-import type { FC } from 'react';
+import { shareURL } from '@tma.js/sdk-react';
+import { type FC } from 'react';
 
 import { Link } from '@/components/Link/Link.tsx';
 import { Page } from '@/components/Page.tsx';
@@ -7,6 +8,11 @@ import { Page } from '@/components/Page.tsx';
 import tonSvg from './ton.svg';
 
 export const IndexPage: FC = () => {
+
+  const handleShare = () => {
+    shareURL(window.location.href, 'Try this Telegram Mini App!');
+  };
+
   return (
     <Page back={false}>
       <List>
@@ -22,6 +28,17 @@ export const IndexPage: FC = () => {
               TON Connect
             </Cell>
           </Link>
+        </Section>
+        <Section
+          header="Test actions"
+          footer="The invoice is created by your bot. Set VITE_TEST_INVOICE_SLUG before testing a payment."
+        >
+          <Cell
+            subtitle="Send an invitation through Telegram"
+            onClick={handleShare}
+          >
+            Share this app
+          </Cell>
         </Section>
         <Section
           header="Application Launch Data"
