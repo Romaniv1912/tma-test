@@ -12,12 +12,12 @@ export function Page({ children, back = true }: PropsWithChildren<{
 
   useEffect(() => {
     if (back) {
-      backButton.show();
+      void backButton.show();
       return backButton.onClick(() => {
-        navigate(-1);
+        void navigate(-1);
       });
     }
-    backButton.hide();
+    void backButton.hide();
   }, [back]);
 
   return <>{children}</>;

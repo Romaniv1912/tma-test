@@ -10,7 +10,8 @@ import { DisplayData, type DisplayDataRow } from '@/components/DisplayData/Displ
 import { Page } from '@/components/Page.tsx';
 
 function getUserRows(user: User): DisplayDataRow[] {
-  return Object.entries(user).map(([title, value]) => ({ title, value }));
+  return Object.entries(user as unknown as Record<string, unknown>)
+    .map(([title, value]) => ({ title, value: String(value) }));
 }
 
 export const InitDataPage: FC = () => {
@@ -23,11 +24,13 @@ export const InitDataPage: FC = () => {
     }
     return [
       { title: 'raw', value: initDataRaw },
-      ...Object.entries(initDataState).reduce<DisplayDataRow[]>((acc, [title, value]) => {
+      ...Object.entries(initDataState as unknown as Record<string, unknown>).reduce<DisplayDataRow[]>((acc, [title, value]) => {
         if (value instanceof Date) {
           acc.push({ title, value: value.toISOString() });
-        } else if (!value || typeof value !== 'object') {
+        } else if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
           acc.push({ title, value });
+        } else if (value == null) {
+          acc.push({ title, value: String(value) });
         }
         return acc;
       }, []),
@@ -49,7 +52,8 @@ export const InitDataPage: FC = () => {
   const chatRows = useMemo<DisplayDataRow[] | undefined>(() => {
     return !initDataState?.chat
       ? undefined
-      : Object.entries(initDataState.chat).map(([title, value]) => ({ title, value }));
+      : Object.entries(initDataState.chat as unknown as Record<string, unknown>)
+        .map(([title, value]) => ({ title, value: String(value) }));
   }, [initDataState]);
 
   if (!initDataRows) {
